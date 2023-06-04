@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-
 	"github.com/gin-gonic/gin"
 	db "github.com/dasotd/simplebank/db/sqlc"
 	"github.com/dasotd/simplebank/token"
