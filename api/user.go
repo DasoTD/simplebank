@@ -3,6 +3,8 @@ package api
 import (
 	"database/sql"
 	_ "database/sql"
+	"fmt"
+	"io/ioutil"
 	"net/http"
 	"time"
 
@@ -44,6 +46,12 @@ func (server *Server) createUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
+	jsonData, err := ioutil.ReadAll(ctx.Request.Body)
+	if err != nil {
+		// Handle error
+	}
+	fmt.Println(jsonData)
+	fmt.Println(req)
 
 	hashedPassword, err := util.HashPassword(req.Password)
 	if err != nil {

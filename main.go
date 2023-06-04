@@ -55,13 +55,5 @@ func main(){
 	if err != nil {
 		log.Fatal("can not start server", err)
 	}
-
-// 	router.Use(gin.Recovery())
-
-//   router.GET("/ping", func(c *gin.Context) {
-//     c.String(http.StatusOK, "pong")
-//   })
-
-// 	router.Run(":8080")
 	
 }
