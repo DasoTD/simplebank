@@ -19,7 +19,7 @@ RUN go mod download && go mod verify
 FROM alpine:3.18
 WORKDIR /app
 COPY --from=builder /app/main .
-# COPY --from=builder /app/migrate.linux-amd64 ./migrate
+COPY --from=builder /app/migrate.linux-amd64 ./migrate
 COPY app.env .
 COPY start.sh .
 COPY wait-for.sh .
