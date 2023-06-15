@@ -1,6 +1,6 @@
 postgres:
 	sudo docker run -d --name postgres15alpl --network bank -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres:15.3-alpine3.17
-creatdb:
+createdb:
 	sudo docker exec -it postgres15alpl createdb --username=root --owner=root simplebank
 
 dropdb:
@@ -36,8 +36,10 @@ mock:
 docker:
 	sudo docker run --name simplebank --network bank -p 8080:8080 -e GIN_MODE=release -e DB_SOURCE="postgresql://root:secret@postgres15alpl:5432/simplebank?sslmode=disable" simplebank:latest
 
+migration:
+	migrate create -ext sql -dir  db/migration -seq {theName}
 
-.PHONY: creatdb dropdb postgres migratedown migrateup migratedown1 migrateup1 test server mock docker
+.PHONY: creatdb dropdb postgres migratedown migrateup migratedown1 migrateup1 test server mock docker migration
 
 
 # migrate create -ext sql -dir db/migration -seq add_users
