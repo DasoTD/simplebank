@@ -39,7 +39,12 @@ docker:
 migration:
 	migrate create -ext sql -dir  db/migration -seq {theName}
 
-.PHONY: creatdb dropdb postgres migratedown migrateup migratedown1 migrateup1 test server mock docker migration
+db_docs:
+	dbdocs build doc/db.dbml
 
+db_schema:
+	dbml2sql --postgres -o doc/schema.sql doc/db.dbml
+
+.PHONY: creatdb dropdb postgres migratedown migrateup migratedown1 migrateup1 test server mock docker migration db_docs db_schema
 
 # migrate create -ext sql -dir db/migration -seq add_users
