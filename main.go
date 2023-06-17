@@ -4,14 +4,21 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"net"
 	_ "net/http"
 	"time"
 
+	"github.com/dasotd/simplebank/gapi"
+	"google.golang.org/grpc"
+
+	// "github.com/techschool/simplebank/mail"
 	"github.com/dasotd/simplebank/api"
 	db "github.com/dasotd/simplebank/db/sqlc"
+	"github.com/dasotd/simplebank/pb"
 	"github.com/dasotd/simplebank/util"
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
+	"google.golang.org/grpc/reflection"
 )
 
 
@@ -47,13 +54,48 @@ func main(){
 	}
 
 	store := db.NewStore(con)
+	runGrpcServer(config, store)
+	// server, err := api.NewServer(config, store)
+	// if err != nil {
+	// 	log.Fatal("can not start server", err)
+	// }
+	// err = server.Start(config.ServerAddress)
+	// if err != nil {
+	// 	log.Fatal("can not start server", err)
+	// }
+	
+}
+func runGrpcServer(config util.Config, store db.Store) {
+	server, err := gapi.NewServer(config, store)
+	if err != nil {
+		log.Fatal("cannot create server", err) //.Err(err).Msg("cannot create server")
+	}
+
+	gprcLogger := grpc.UnaryInterceptor(gapi.GrpcLogger)
+	grpcServer := grpc.NewServer(gprcLogger)
+	pb.RegisterSimpleBankServer(grpcServer, server)
+	reflection.Register(grpcServer)
+
+	listener, err := net.Listen("tcp", config.GRPCServerAddress)
+	if err != nil {
+		log.Fatal("cannot create server", err ) //.Err(err).Msg("cannot create listener")
+	}
+
+	log.Printf("start gRPC server at %s", listener.Addr().String()) //.Msgf("start gRPC server at %s", listener.Addr().String())
+	err = grpcServer.Serve(listener)
+	if err != nil {
+		log.Fatal("cannot start Grpc server", err) //.Err(err).Msg("cannot start gRPC server")
+	}
+}
+
+func runGinServer(config util.Config, store db.Store) {
 	server, err := api.NewServer(config, store)
 	if err != nil {
-		log.Fatal("can not start server", err)
+		log.Fatal("cannot create server", err)//.Err(err).Msg("cannot create server")
 	}
-	err = server.Start(config.ServerAddress)
+
+	err = server.Start(config.HTTPServerAddress)
 	if err != nil {
-		log.Fatal("can not start server", err)
+		log.Fatal("cannot start server", err) //.Err(err).Msg("cannot start server")
 	}
-	
 }

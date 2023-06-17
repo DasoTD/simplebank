@@ -45,6 +45,21 @@ db_docs:
 db_schema:
 	dbml2sql --postgres -o doc/schema.sql doc/db.dbml
 
-.PHONY: creatdb dropdb postgres migratedown migrateup migratedown1 migrateup1 test server mock docker migration db_docs db_schema
+proto:
+	rm -f pb/*.go
+	protoc --proto_path=proto --go_out=pb --go_opt=paths=source_relative \
+	--go-grpc_out=pb --go-grpc_opt=paths=source_relative \
+	proto/*.proto
+	
+evans:
+	evans --host localhost --port 9090 -r repl
+
+
+.PHONY: creatdb dropdb postgres migratedown migrateup migratedown1 migrateup1 test server mock docker migration db_docs db_schema proto evans
 
 # migrate create -ext sql -dir db/migration -seq add_users
+# statik -src=./doc/swagger -dest=./doc
+# --grpc-gateway_out=pb --grpc-gateway_opt=paths=source_relative \
+	# --openapiv2_out=doc/swagger --openapiv2_opt=allow_merge=true,merge_file_name=simple_bank \
+
+# rm -f doc/swagger/*.swagger.json
