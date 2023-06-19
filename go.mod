@@ -12,6 +12,7 @@ require (
 	github.com/rakyll/statik v0.1.7
 	github.com/stretchr/testify v1.8.3
 	github.com/techschool/simplebank v0.0.0-20230402121500-bdfe8e7aa022
+	google.golang.org/genproto v0.0.0-20230410155749-daa745c078e1
 	google.golang.org/grpc v1.56.0
 	google.golang.org/protobuf v1.30.0
 )
@@ -40,7 +41,6 @@ require (
 	github.com/ugorji/go/codec v1.2.9 // indirect
 	golang.org/x/arch v0.0.0-20210923205945-b76863e36670 // indirect
 	golang.org/x/net v0.10.0 // indirect
-	google.golang.org/genproto v0.0.0-20230410155749-daa745c078e1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	sigs.k8s.io/yaml v1.3.0 // indirect
 )
