@@ -55,14 +55,6 @@ func main(){
 
 	store := db.NewStore(con)
 	runGrpcServer(config, store)
-	// server, err := api.NewServer(config, store)
-	// if err != nil {
-	// 	log.Fatal("can not start server", err)
-	// }
-	// err = server.Start(config.ServerAddress)
-	// if err != nil {
-	// 	log.Fatal("can not start server", err)
-	// }
 	
 }
 func runGrpcServer(config util.Config, store db.Store) {
